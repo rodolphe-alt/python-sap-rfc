@@ -1,1 +1,1 @@
-connect to SAP from Python: call SAP Function Module
+connect to SAP from Python under Linux: call SAP Function Module
