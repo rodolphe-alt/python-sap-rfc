@@ -1,0 +1,53 @@
+with root
+[root@centos8 centos]# yum install python39 python39-devel git unzip gcc gcc-c++
+download : nwrfc750P_12-70002752.zip from SAP website https://support.sap.com/en/product/connectors/nwrfcsdk.html
+unzip nwrfc750P_12-70002752.zip
+mv nwrfcsdk /usr/local/
+-- Unzip the NW RFC SDK archive into a directory of your choice and then add the subdirectory "lib" of the SDK to the operating system's library path environment variable. on Linux and most Unix systems "LD_LIBRARY_PATH"
+-- Please note that on Linux and Unix you need to adjust the permissions for the libraries via chmod +x to ensure they have the execution permission if you're not using jar for extracting files from the ZIP archive.
+
+vi ~/.bashrc
+add these lines :
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/nwrfcsdk/lib
+	export LD_LIBRARY_PATH
+	SAPNWRFC_HOME=/usr/local/nwrfcsdk
+	export SAPNWRFC_HOME
+	
+logoff/login
+test bin :
+	[root@centos8 bin]# /usr/local/nwrfcsdk/bin/startrfc -v
+	NW RFC Library Version: 750 Patch Level 12
+	Compiler Version:
+	4.8.5
+	Startrfc Version: 2018-08-15
+
+
+vi /etc/ld.so.conf.d/nwrfcsdk.conf
+# include nwrfcsdk
+/usr/local/nwrfcsdk/lib
+
+[root@centos8 centos]# ldconfig
+[root@centos8 centos]# ldconfig -p | grep sap
+        libsapucum.so (libc6,x86-64) => /usr/local/nwrfcsdk/lib/libsapucum.so
+        libsapnwrfc.so (libc6,x86-64) => /usr/local/nwrfcsdk/lib/libsapnwrfc.so
+        libgssapi_krb5.so.2 (libc6,x86-64) => /lib64/libgssapi_krb5.so.2
+
+[root@centos8 ~]# cd
+[root@centos8 ~]# pip3 install pyrfc
+Successfully built pyrfc
+Installing collected packages: pyrfc
+Successfully installed pyrfc-3.3.1
+
+[root@centos8 ~]# python3 test.py
+
+-checking column size limit
+[{'ADRNR': ' ',
+  'CCCATEGORY': 'S',
+  'CCCOPYLOCK': ' ',
+  'CCCORACTIV': '2',
+  'CCIMAILDIS': ' ',
+  'CCNOCASCAD': ' ',
+  'CCNOCLIIND': '3',
+  'CCORIGCONT': ' ',
+[...]
+
